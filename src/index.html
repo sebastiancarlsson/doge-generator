@@ -1,0 +1,25 @@
+<html ng-app="DogeGenerator">
+<head>
+	<title>DOGE GENERATOR</title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.min.js"></script>
+	<script type="text/javascript" src="js/init.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.min.css" />
+</head>
+<body>
+	<div id="form">
+		<h1>doge generator</h1>
+		1. write your words in the box, separated by commas<br />
+		2. repeat a word to make it appear more often<br />
+		3. copy link<br />
+		<br />
+		wow<br />
+		<br />
+		<div ng-controller="PhraseCtrl">
+			<form>
+				<textarea ng-model="phrases" ng-change="updatePhrases()"></textarea>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
