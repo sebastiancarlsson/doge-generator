@@ -3,7 +3,7 @@ doge-generator
 
 Generate your own doge meme
 
-Built for fun... and my first attempt to use Angular JS
+Built for fun... and to try out Angular JS
 
 <http://doge-generator.com>
 
