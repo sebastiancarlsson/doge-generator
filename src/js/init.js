@@ -1,8 +1,31 @@
-var phrases = ["wow", "wow", "cool", "amaze"];
+
+var vars = {};
+var hrefParts = window.location.href.split('?');
+var phrases;
+if(hrefParts[1]) {
+	$.each(hrefParts[1].split('&'), function(i, v) {
+		v = v.split('=');
+		vars[v[0]] = v[1];
+	});
+
+	phrases = decodeURIComponent(vars.w).split(',');
+} else {
+	phrases = ["wow", "much cool", "lol"];
+}
 
 var app = angular.module('DogeGenerator', []);
-app.controller("PhraseCtrl", ["$scope", function($scope) {
+// http://stackoverflow.com/questions/14995884/select-text-on-input-focus-in-angular-js
+app.directive('selectOnClick', function () {
+    // Linker function
+    return function (scope, element, attrs) {
+        element.bind('click', function () {
+            this.select();
+        });
+    };
+});
+app.controller("DogeCtrl", ["$scope", function($scope) {
 	$scope.phrases = phrases;
+	$scope.url = "";
 
 	$scope.updatePhrases = function() {
 		var phrases = $scope.phrases.split(',');
@@ -18,17 +41,62 @@ app.controller("PhraseCtrl", ["$scope", function($scope) {
 				phrases[i] = str;
 			}
 		}
-		
+
 		window.phrases = phrases;
+
+		$scope.updateURL();
+
+		$scope.resetWords();
 	};
+
+	$scope.resetWords = function() {
+		$('.text').remove();
+		for(var i = 0; i < 25; i++) {
+			createText();
+		}
+	}
+
+	$scope.updateURL = function() {
+		var encoded = [];
+		$.each(phrases, function(i, v) {
+			encoded.push(encodeURIComponent(v));
+		});
+
+		$scope.url = 'http://doge-generator.com/?w=' + encoded.join(',');
+
+		//window.location.href = $scope.url;
+	}
+
+	$scope.showForm = function() {
+		$('.form-container').show();
+		$('#resetButton').hide();
+		$('.divider').hide();
+	}
+
+	$scope.hideForm = function() {
+		$('.form-container').hide();
+		$('#resetButton').html('click here to open the form again').show();
+		$('.divider').show();
+	}
+
+	$scope.showCredits = function() {
+		$('.credits').show();
+	}
+
+	$scope.hideCredits = function() {
+		$('.credits').hide();
+	}
+
+	$scope.updateURL();
+}]);
+app.controller("CreditsCtrl", ["$scope", function($scope) {
+
 }]);
 
-var colors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff"];
+var colors = ["red", "green", "blue", "yellow", "magenta", "cyan"];
 var sizes = ["small", "medium", "big"];
-var text = [];
 
 function getPhrase() {
-	console.log(phrases);
 	if(!phrases.length) { 
 		return "wow"; 
 	}
@@ -36,25 +104,24 @@ function getPhrase() {
 	return phrases[i];
 }
 
-function getColor() {
-	var i = Math.floor(Math.random() * colors.length);
-	return colors[i];
-}
-
 function createText() {
-	if(text.length > 250) {
+	var text = $('.text');
+	if(text.length > 100) {
 		text[0].remove();
-		text.shift();
 	}
 
 	var div = $('<div />').addClass('text');
 	div.addClass( sizes[Math.floor(Math.random() * sizes.length)] )
+	div.addClass( colors[Math.floor(Math.random() * sizes.length)] )
 	div.html(getPhrase());
 	div.css('left', (Math.round(Math.random() * 100)) + "%");
 	div.css('top', (Math.round(Math.random() * 100)) + "%");
-	div.css('color', getColor());
-	text.push(div);
 	$('body').append(div);
 }
 
-setInterval(createText, 1000);
+$(function(){
+	for(var i = 0; i < 25; i++) {
+		createText();
+	}
+	setInterval(createText, 500);
+})
