@@ -8,7 +8,8 @@ if(hrefParts[1]) {
 		vars[v[0]] = v[1];
 	});
 
-	phrases = decodeURIComponent(vars.w).split(',');
+
+	phrases = decodeURIComponent(vars.w).replace('+', ' ').split(',');
 } else {
 	phrases = ["wow", "much cool", "lol"];
 }
