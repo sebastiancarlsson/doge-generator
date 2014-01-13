@@ -9,7 +9,7 @@ if(hrefParts[1]) {
 	});
 
 
-	phrases = decodeURIComponent(vars.w).replace('+', ' ').split(',');
+	phrases = decodeURIComponent(vars.w).replace(/\+/g, ' ').split(',');
 } else {
 	phrases = ["wow", "much cool", "lol"];
 }
@@ -107,7 +107,7 @@ function getPhrase() {
 
 function createText() {
 	var text = $('.text');
-	if(text.length > 100) {
+	if(text.length > 50) {
 		text[0].remove();
 	}
 
